@@ -3,13 +3,13 @@ var Promise = require('expecto/node_modules/bluebird');
 
 var debug = require('debug')('horizons-expecto');
 
-debug('spawning telnet');
-var horizons = expecto.spawn('telnet', ['ssd.jpl.nasa.gov', '6775']);
+var horizons = null;
 
 function nop() {}
 
 function expect(what) {
   return function () {
+    horizons.timeout(5000).then(nop, nop);
     return horizons.expect(what);
   }
 }
@@ -22,16 +22,18 @@ function send(what) {
 
 function expectPrompt() {
   debug('expecting prompt');
+  horizons.timeout(5000).then(nop, nop);
   return horizons.expect(/Horizons>/);
 }
 
 function lookUp(what) {
-  debug('lookin up %j', what);
-  horizons.send(what + '\n');
-  return horizons.expect(/Continue.*/).then(function () {
-    debug('confirming search results');
-    horizons.send('y\n');
-  });
+  return Promise.resolve()
+    .then(expectPrompt)
+    .then(trace('looking up ' + what))
+    .then(send(what))
+    .then(expect(/Continue.*/))
+    .then(trace('confirming search results'))
+    .then(send('y'));
 }
 
 function trace(message) {
@@ -70,7 +72,7 @@ function parse() {
 function parseBlocks() {
   return new Promise(function (fulfill, reject) {
     function loop() {
-      horizons.timeout().then(reject, nop);
+      horizons.timeout(3000).then(reject, nop);
 
       horizons.expect(/^(\d+\.\d+) = (.\..\. \d{4}-(?:.{3})-\d{2} \d{2}:\d{2}:\d{2}.\d{4}) \(..\)$/m)
         .then(parseBlock)
@@ -86,8 +88,6 @@ function parseBlocks() {
 }
 
 function parseBlock(match) {
-  console.log('parseBlock: %j', match.matches);
-
   var data = {
     'JD': match.matches[1]
   };
@@ -118,15 +118,21 @@ function parseBlock(match) {
 }
 
 function setup() {
+  debug('spawning telnet');
+  horizons = expecto.spawn('telnet', ['ssd.jpl.nasa.gov', '6775']);
+
   return Promise.resolve()
     .then(expectPrompt)
     .then(trace('Turning off paging'))
     .then(send('P'))
-    .then(expectPrompt)
 }
 
-setup()
-  .then(function () { return lookUp('DES=C/2012 S1;') })
-  .then(function () { return ephemerides('Sun', 'eclip', '01-Sep-2012', '31-Dec-2012', '1d') })
-  .then(parse)
-  .then(expect(/>>> Select.*:.*/)).then(trace('quit')).then(send('Q'));
+function Horizons(body, startingCT, endingCT) {
+  setup()
+    .then(function () { return lookUp(body) })
+    .then(function () { return ephemerides('@Sun', 'eclip', startingCT, endingCT, '1d') })
+    .then(parse)
+    .then(expect(/>>> Select.*:.*/)).then(trace('quit')).then(send('Q'));
+}
+
+module.exports = Horizons;
