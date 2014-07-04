@@ -1,0 +1,71 @@
+#!/usr/bin/env node
+
+var horizons = require('../');
+
+var SEARCH_SYNTAX = [
+  "Look up a major body, comet or asteroid",
+  "Usage: horizons search <designation>",
+];
+
+var APPROACHES_SYNTAX = [
+  "Generate table of planetary close-approaches",
+  "Usage: horizons approaches <designation>",
+];
+
+var EPHEMERIS_SYNTAX = [
+  "Generate a table of positional data over some time interval",
+
+  "Subcommands:",
+
+    "  observe", [
+      "Observables such as apparent RA/DEC, alt-az, others"
+    ],
+
+    "  elements", [
+      "Osculating orbital elements { e, q, i, LAN, APF, TP, + }",
+      "Usage: horizons ephemeris elements [options] <designation>",
+
+      "Options:",
+      "  -c, --center NAME  Origin of the coordinate system #default(Sun)",
+      "  -f, --frame FRAME  Coordinate frame, one of: eclip, frame, body #default(eclip)",
+    ],
+
+    "  vectors", [
+      "Cartesian vector components { x,y,z,vx,vy,vz, + }"
+    ],
+
+  "Date options:",
+  "  -s, --start DATE     Starting CT of observation #fancydefault", today,
+  "  -e, --end DATE       Ending CT of observation #fancydefault", today,
+  "  -p, --period PERIOD  Interval of observations #default(1h)",
+];
+
+var options = require('dreamopt')([
+  "Interrogate NASA HORIZONS system",
+
+  "Commands:",
+  "  search", SEARCH_SYNTAX,
+  "  approaches", APPROACHES_SYNTAX,
+  "  ephemeris", EPHEMERIS_SYNTAX,
+
+  "Common arguments:",
+  "  <designation>  A name of body (e.g. 'DES=C/2012 S1;') #required",
+
+  "Common options:",
+  "  -n, --dry-run  Don't actually do anything #delayfunc", function (value, options) {
+    console.log(options);
+    process.exit(0);
+  },
+  "  -v, --version  Print a version number and exit", function () {
+    console.log(require('../package.json').version);
+    process.exit(0);
+  }
+]);
+
+function today(value, options) {
+  if (!value) {
+    return new Date().toString();
+  }
+}
+
+horizons(options.designation, options.start, options.end);

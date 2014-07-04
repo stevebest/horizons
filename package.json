@@ -2,29 +2,33 @@
   "name": "node-horizons-expecto",
   "version": "0.0.0",
   "description": "Interrogate HORIZONS using expecto-wrangled telnet",
-  "main": "horizons-expecto.js",
-  "scripts": {
-    "test": "mocha"
+  "author": "Stepan Stolyarov <stepan.stolyarov@gmail.com>",
+  "keywords": [
+    "nasa",
+    "horizons"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/stevebest/node-horizons-expecto",
+  "bugs": {
+    "url": "https://github.com/stevebest/node-horizons-expecto/issues"
   },
   "repository": {
     "type": "git",
     "url": "git://github.com/stevebest/node-horizons-expecto.git"
   },
-  "keywords": [
-    "nasa",
-    "horizons"
-  ],
-  "author": "Stepan Stolyarov <stepan.stolyarov@gmail.com>",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/stevebest/node-horizons-expecto/issues"
+  "main": "index.js",
+  "bin": {
+    "horizons": "./bin/horizons"
   },
-  "homepage": "https://github.com/stevebest/node-horizons-expecto",
+  "scripts": {
+    "test": "mocha"
+  },
   "devDependencies": {
     "mocha": "^1.20.1"
   },
   "dependencies": {
     "debug": "^1.0.2",
+    "dreamopt": "^0.8.0",
     "expecto": "^0.2.1"
   }
 }
