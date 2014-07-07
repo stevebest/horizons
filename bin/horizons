@@ -27,7 +27,7 @@ var EPHEMERIS_SYNTAX = [
 
       "Options:",
       "  -c, --center NAME  Origin of the coordinate system #default(Sun)",
-      "  -f, --frame FRAME  Coordinate frame, one of: eclip, frame, body #default(eclip)",
+      "  -f, --ref-plane FRAME  Coordinate frame, one of: eclip, frame, body #default(eclip)",
     ],
 
     "  vectors", [
@@ -35,9 +35,9 @@ var EPHEMERIS_SYNTAX = [
     ],
 
   "Date options:",
-  "  -s, --start DATE     Starting CT of observation #fancydefault", today,
-  "  -e, --end DATE       Ending CT of observation #fancydefault", today,
-  "  -p, --period PERIOD  Interval of observations #default(1h)",
+  "  -s, --start DATE    Starting CT of observation #fancydefault", today,
+  "  -e, --end DATE      Ending CT of observation #fancydefault", today,
+  "  -i, --interval FMT  Interval of observations; format: {integer}[units] [mode] #default(1h)",
 ];
 
 var options = require('dreamopt')([
@@ -64,8 +64,26 @@ var options = require('dreamopt')([
 
 function today(value, options) {
   if (!value) {
-    return new Date().toString();
+    var today = new Date();
+    return [
+      today.getFullYear(),
+      ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][today.getMonth()],
+      today.getDate()
+    ].join('-');
   }
 }
 
-horizons(options.designation, options.start, options.end);
+switch (options.command) {
+case 'ephemeris':
+  switch (options.subcommand) {
+  case 'elements':
+    horizons.ephemeris.elements(options);
+    break;
+  default:
+    throw new Error('unrecognized subcommand', options.subcommand);
+  }
+  break;
+case 'search':
+case 'approaches':
+  throw new Error('not implemented');
+}
