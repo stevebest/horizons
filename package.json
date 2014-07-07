@@ -29,6 +29,6 @@
   "dependencies": {
     "debug": "^1.0.2",
     "dreamopt": "^0.8.0",
-    "expecto": "^0.2.1"
+    "expecto": "^0.2.4"
   }
 }
