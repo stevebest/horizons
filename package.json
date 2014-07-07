@@ -1,6 +1,6 @@
 {
   "name": "horizons",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Interrogate HORIZONS using expecto-wrangled telnet",
   "author": "Stepan Stolyarov <stepan.stolyarov@gmail.com>",
   "keywords": [
