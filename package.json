@@ -1,5 +1,5 @@
 {
-  "name": "node-horizons-expecto",
+  "name": "horizons",
   "version": "0.0.0",
   "description": "Interrogate HORIZONS using expecto-wrangled telnet",
   "author": "Stepan Stolyarov <stepan.stolyarov@gmail.com>",
@@ -8,13 +8,13 @@
     "horizons"
   ],
   "license": "ISC",
-  "homepage": "https://github.com/stevebest/node-horizons-expecto",
+  "homepage": "https://github.com/stevebest/horizons",
   "bugs": {
-    "url": "https://github.com/stevebest/node-horizons-expecto/issues"
+    "url": "https://github.com/stevebest/horizons/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/stevebest/node-horizons-expecto.git"
+    "url": "git://github.com/stevebest/horizons.git"
   },
   "main": "index.js",
   "bin": {
