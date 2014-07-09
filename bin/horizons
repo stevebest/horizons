@@ -27,7 +27,7 @@ var EPHEMERIS_SYNTAX = [
 
       "Options:",
       "  -c, --center NAME  Origin of the coordinate system #default(Sun)",
-      "  -f, --ref-plane FRAME  Coordinate frame, one of: eclip, frame, body #default(eclip)",
+      "  -f, --refPlane FRAME  Coordinate frame, one of: eclip, frame, body #default(eclip)",
     ],
 
     "  vectors", [
