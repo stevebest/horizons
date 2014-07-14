@@ -64,7 +64,7 @@ var options = require('dreamopt')([
 
 function today(value) {
   if (!value) {
-    return horizons.formatDate(new Date());
+    return horizons.formatDate(horizons.today());
   }
 }
 
