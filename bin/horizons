@@ -62,14 +62,9 @@ var options = require('dreamopt')([
   }
 ]);
 
-function today(value, options) {
+function today(value) {
   if (!value) {
-    var today = new Date();
-    return [
-      today.getFullYear(),
-      ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][today.getMonth()],
-      today.getDate()
-    ].join('-');
+    return horizons.formatDate(new Date());
   }
 }
 
